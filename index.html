@@ -169,26 +169,13 @@
         <div class="column is-four-fifths">
           <h2 class="title is-3">Overall Pipeline</h2>
           <div class="box m-5 figure-box">
-            <img src="assets/framework.png" alt="LVCG framework overview">
-            <p class="figure-title">Pipeline of LVCG</p>
-            <p class="figure-caption">
-              LVCG performs self-supervised multi-lead reconstruction through a latent VCG space —
-              beat processing, geometry-induced lift/project, VCG token bottleneck, and GRU temporal modeling.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="columns is-centered has-text-centered" style="margin-top: 1rem;">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">Model Architecture</h2>
-          <div class="box m-5 figure-box">
             <img src="assets/fig1.png" alt="LVCG model architecture">
             <p class="figure-title">Architecture of LVCG (Fig. 1)</p>
             <p class="figure-caption">
               (<strong>a</strong>) Beat-level processing &nbsp;·&nbsp;
               (<strong>b</strong>) VCG space transformation &nbsp;·&nbsp;
               (<strong>c</strong>) VCG beat encoder and temporal module.
+              LVCG performs self-supervised multi-lead reconstruction through a latent VCG space.
             </p>
           </div>
         </div>
@@ -253,17 +240,6 @@
             <img src="assets/vcg.png" alt="Frank vectorcardiogram">
             <p class="figure-caption" style="margin-top: 0.75rem;">
               Frank VCG: compact 3D representation of cardiac electrical activity.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="columns is-centered has-text-centered" style="margin-top: 1rem;">
-        <div class="column is-four-fifths">
-          <div class="box figure-box">
-            <img src="assets/vcg_space.png" alt="VCG to ECG projection">
-            <p class="figure-caption" style="margin-top: 0.75rem;">
-              Each lead $e_l(t)=\mathbf{u}_l^\top\mathbf{v}(t)$ is one view of the same 3D field $\mathbf{v}(t)$.
             </p>
           </div>
         </div>
