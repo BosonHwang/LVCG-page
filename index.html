@@ -31,6 +31,7 @@
       <li><a href="#abstract">Abstract</a></li>
       <li><a href="#method">Method</a></li>
       <li><a href="#results">Results</a></li>
+      <li><a href="#qualitative">Visualizations</a></li>
       <li><a href="#bibtex">BibTeX</a></li>
       <li><a href="https://github.com/BosonHwang/LVCG" target="_blank" rel="noopener">Code</a></li>
     </ul>
@@ -96,6 +97,18 @@
     </div>
   </div>
 
+  <!-- Framework teaser -->
+  <section id="teaser">
+    <div class="figure figure--hero">
+      <img src="assets/framework.png" alt="LVCG framework: beat-level processing, VCG-space lift/project transformation, VCG beat encoder, and temporal module">
+      <p class="caption">
+        <strong>LVCG overview.</strong> Beat-level processing yields rhythm embeddings; geometry-induced
+        <em>lift</em> and <em>project</em> enforce cross-lead consistency in latent VCG space; a token bottleneck
+        and GRU temporal module produce structure, dynamic, and rhythm embeddings for downstream tasks.
+      </p>
+    </div>
+  </section>
+
   <!-- Abstract -->
   <section id="abstract">
     <h2 class="section-title">Abstract</h2>
@@ -133,11 +146,21 @@
         </ul>
       </div>
     </div>
-    <div class="figure" style="margin-top: 1.5rem;">
-      <img src="assets/vcg_concept.svg" alt="3D VCG trajectory projected onto ECG leads I, V2, aVF">
+    <div class="figure-row" style="margin-top: 1.5rem;">
+      <div class="figure">
+        <img src="assets/heart.png" alt="Multi-lead ECG as linear projections of cardiac electrical field">
+        <p class="caption"><strong>Left:</strong> Multi-lead ECG provides multiple linear projections of the same underlying cardiac field from different lead directions.</p>
+      </div>
+      <div class="figure">
+        <img src="assets/vcg.png" alt="Frank vectorcardiogram as 3D representation of cardiac field">
+        <p class="caption"><strong>Right:</strong> Frank vectorcardiogram (VCG) offers a 3D representation of this field; lead geometry defines a mapping between VCG and ECG space.</p>
+      </div>
+    </div>
+    <div class="figure" style="margin-top: 1rem;">
+      <img src="assets/vcg_space.png" alt="3D VCG trajectory projected onto ECG leads">
       <p class="caption">
         Each lead $e_l(t)=\mathbf{u}_l^\top\mathbf{v}(t)$ is one 1D view of the same 3D field
-        $\mathbf{v}(t)$; the fixed lead geometry maps between VCG and ECG space.
+        $\mathbf{v}(t)$; the fixed lead direction matrix $\mathbf{A}$ maps between VCG and ECG space.
       </p>
     </div>
   </section>
@@ -146,11 +169,28 @@
   <section id="method">
     <h2 class="section-title"><span class="num">2</span>Method</h2>
 
-    <div class="figure">
-      <img src="assets/framework.svg" alt="LVCG framework pipeline">
-      <p class="caption">
-        LVCG performs self-supervised multi-lead reconstruction: observe $K$ leads, recover the full 12-lead ECG through a latent VCG space with geometry-induced lift and project operations.
-      </p>
+    <div class="figure-panel">
+      <div class="panel-title">Model Architecture (Fig. 1)</div>
+      <div class="figure">
+        <img src="assets/fig1.png" alt="LVCG model architecture with beat processing, VCG transformation, encoder, and temporal module">
+        <p class="caption">
+          ECG self-supervised learning via multi-lead reconstruction.
+          (<strong>a</strong>) Beat-level processing yields beat patches and rhythm embeddings.
+          (<strong>b</strong>) VCG space transformation performs lift and project for cross-lead reconstruction.
+          (<strong>c</strong>) The VCG beat encoder and temporal module produce structure and dynamic embeddings.
+        </p>
+      </div>
+    </div>
+
+    <div class="figure-panel">
+      <div class="panel-title">Partial-Lead Reconstruction in VCG Space</div>
+      <div class="figure">
+        <img src="assets/reconstruction/partial_lead_LVCG.png" alt="LVCG partial-lead reconstruction: observe K leads, reconstruct missing leads through latent VCG">
+        <p class="caption">
+          Self-supervised pretext task: given a visible lead subset $\mathcal{I}$ ($K$ leads), LVCG lifts to VCG,
+          encodes beat morphology, models inter-beat dynamics, and projects back to reconstruct masked leads $\mathcal{J}$.
+        </p>
+      </div>
     </div>
 
     <div class="card" style="margin-top: 1.5rem;">
@@ -300,6 +340,53 @@
       <p style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--text-secondary);">
         Removing, learning, or shuffling the VCG transform degrades performance sharply — geometry is load-bearing.
       </p>
+    </div>
+  </section>
+
+  <!-- Qualitative visualizations -->
+  <section id="qualitative">
+    <h2 class="section-title"><span class="num">4</span>Qualitative Results</h2>
+
+    <h3 class="subsection-title">Embedding Structure under Domain Shift (CPSC 2018)</h3>
+    <div class="figure-panel">
+      <div class="figure">
+        <img src="assets/tsne.png" alt="t-SNE of ECG embeddings on CPSC2018: LVCG shows clearer label-aligned clusters">
+        <p class="caption">
+          t-SNE visualization of ECG embeddings on <strong>CPSC 2018</strong> (strong shift from MIMIC-IV pretraining).
+          LVCG separates diagnostic labels far more cleanly than ST-MEM and HeartLang, supporting cross-dataset generalization.
+        </p>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">Multi-Lead Reconstruction Quality (PTB, 3→12)</h3>
+    <div class="figure-row">
+      <div class="figure">
+        <img src="assets/recon_pca_kde.png" alt="Embedding-space density comparison between reconstructed and ground-truth leads">
+        <p class="caption"><strong>Left:</strong> Embedding-space density comparison — LVCG reconstructions better match ground-truth lead distributions.</p>
+      </div>
+      <div class="figure">
+        <img src="assets/recon_radar.png" alt="Per-lead reconstruction MAE radar chart">
+        <p class="caption"><strong>Right:</strong> Per-lead reconstruction MAE on the 9 reconstructed leads — LVCG reduces error across leads.</p>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">Waveform Reconstruction Examples</h3>
+    <p class="table-caption" style="margin-bottom: 0.75rem;">
+      Qualitative comparisons on PTB in the $(3,12)$ setting: the model observes 3 input leads and reconstructs the remaining 9 leads (shown vs. ground truth).
+    </p>
+    <div class="figure-grid">
+      <div class="figure">
+        <img src="assets/reconstruction/compare_0000_s0012_re.png" alt="Reconstruction example 1">
+        <p class="caption">Sample 0000</p>
+      </div>
+      <div class="figure">
+        <img src="assets/reconstruction/compare_0001_s0551_re.png" alt="Reconstruction example 2">
+        <p class="caption">Sample 0551</p>
+      </div>
+      <div class="figure">
+        <img src="assets/reconstruction/compare_0002_s0164lre.png" alt="Reconstruction example 3">
+        <p class="caption">Sample 0164</p>
+      </div>
     </div>
   </section>
 
