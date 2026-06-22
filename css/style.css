@@ -90,6 +90,19 @@ body {
   border-radius: 6px;
 }
 
+.figure-box--hero {
+  margin: 0;
+  padding: 0.75rem 0.5rem 1rem !important;
+}
+
+.figure-box--hero img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+}
+
 .figure-box .figure-title {
   margin-top: 1rem;
   margin-bottom: 0.25rem;
