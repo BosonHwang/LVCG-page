@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" role="img" aria-label="LVCG framework pipeline">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E8EFF2"/>
+      <stop offset="100%" stop-color="#FAFAFB"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#155E78"/>
+    </marker>
+  </defs>
+  <rect width="900" height="220" rx="12" fill="url(#bg)" stroke="#D5E2E7"/>
+
+  <!-- Beat -->
+  <rect x="20" y="60" width="110" height="100" rx="8" fill="#fff" stroke="#155E78" stroke-width="1.5"/>
+  <text x="75" y="95" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0F4254">Beat</text>
+  <text x="75" y="118" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#555">R-R + patches</text>
+  <path d="M35 140 Q50 125 65 140 T95 140" stroke="#155E78" fill="none" stroke-width="2"/>
+
+  <line x1="135" y1="110" x2="165" y2="110" stroke="#155E78" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Lift -->
+  <rect x="170" y="60" width="110" height="100" rx="8" fill="#fff" stroke="#155E78" stroke-width="1.5"/>
+  <text x="225" y="95" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0F4254">Lift</text>
+  <text x="225" y="118" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#555">ECG ’ VCG</text>
+  <circle cx="225" cy="145" r="18" fill="none" stroke="#155E78" stroke-width="1.5"/>
+  <path d="M215 145 L225 135 L235 145 L225 155 Z" fill="#155E78" opacity="0.3"/>
+
+  <line x1="285" y1="110" x2="315" y2="110" stroke="#155E78" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Encode -->
+  <rect x="320" y="60" width="110" height="100" rx="8" fill="#fff" stroke="#155E78" stroke-width="1.5"/>
+  <text x="375" y="95" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0F4254">Encode</text>
+  <text x="375" y="118" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#555">VCG tokens</text>
+  <rect x="355" y="130" width="40" height="28" rx="4" fill="#E8EFF2" stroke="#155E78"/>
+
+  <line x1="435" y1="110" x2="465" y2="110" stroke="#155E78" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Temporal -->
+  <rect x="470" y="60" width="110" height="100" rx="8" fill="#fff" stroke="#155E78" stroke-width="1.5"/>
+  <text x="525" y="95" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0F4254">Temporal</text>
+  <text x="525" y="118" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#555">GRU dynamics</text>
+  <path d="M490 145 h70" stroke="#155E78" stroke-width="1.5" fill="none"/>
+  <path d="M490 155 h50" stroke="#155E78" stroke-width="1.5" fill="none" opacity="0.5"/>
+
+  <line x1="585" y1="110" x2="615" y2="110" stroke="#155E78" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Project -->
+  <rect x="620" y="60" width="110" height="100" rx="8" fill="#FFF7E0" stroke="#C9A24A" stroke-width="1.5"/>
+  <text x="675" y="95" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0F4254">Project</text>
+  <text x="675" y="118" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#555">VCG ’ ECG</text>
+  <path d="M640 140 Q660 125 675 140 T710 140" stroke="#C9A24A" fill="none" stroke-width="2"/>
+
+  <line x1="735" y1="110" x2="765" y2="110" stroke="#155E78" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Embedding -->
+  <rect x="770" y="55" width="110" height="110" rx="8" fill="#155E78"/>
+  <text x="825" y="100" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#fff">ECG</text>
+  <text x="825" y="120" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#fff">Embedding</text>
+  <text x="825" y="145" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" fill="#D5E2E7">struct + dyn + rhythm</text>
+
+  <text x="450" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="600" fill="#0F4254">LVCG: Self-Supervised Multi-Lead Reconstruction in Latent VCG Space</text>
+</svg>

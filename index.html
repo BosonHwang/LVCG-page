@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LVCG: Learning Cardiac Latent Representations in Vectorcardiogram Space — ICML 2026">
+  <meta name="keywords" content="ECG, vectorcardiogram, VCG, self-supervised learning, representation learning, ICML 2026">
+  <title>LVCG — ICML 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        packages: {'[+]': ['ams']}
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="inner">
+    <a class="brand" href="#">LVCG</a>
+    <ul class="links">
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#method">Method</a></li>
+      <li><a href="#results">Results</a></li>
+      <li><a href="#bibtex">BibTeX</a></li>
+      <li><a href="https://github.com/BosonHwang/LVCG" target="_blank" rel="noopener">Code</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="inner">
+    <div class="venue-badge">
+      <span>ICML</span>
+      <span>2026</span>
+      <span class="tag">POSTER</span>
+    </div>
+
+    <h1>Learning Cardiac Latent Representations in <span class="accent">Vectorcardiogram Space</span></h1>
+    <p class="subtitle">Self-supervised ECG representation learning in a physically-grounded latent VCG space</p>
+
+    <p class="authors">
+      <span class="author">Bosong Huang<sup>1</sup></span>,
+      <span class="author">Panzhen Zhao<sup>1</sup></span>,
+      <span class="author">Zengxiang Li<sup>2,3</sup></span>,
+      <span class="author">Patricia Lee<sup>1</sup></span>,
+      <span class="author">Wei Jin<sup>4</sup></span>,
+      <span class="author">Alan Wee-Chung Liew<sup>1</sup></span>,
+      <span class="author">Ming Jin<sup>1†</sup></span>,
+      <span class="author">Shirui Pan<sup>1†</sup></span>
+    </p>
+    <p class="affiliations">
+      <sup>1</sup>Griffith University, Australia &nbsp;·&nbsp;
+      <sup>2</sup>SingHealth Duke-NUS AI in Medicine Institute &nbsp;·&nbsp;
+      <sup>3</sup>SingHealth AI Office, Singapore &nbsp;·&nbsp;
+      <sup>4</sup>Emory University, USA<br>
+      <sup>†</sup>Corresponding authors
+    </p>
+
+    <div class="hero-links">
+      <a class="btn btn-primary" href="https://github.com/BosonHwang/LVCG" target="_blank" rel="noopener">&#128187; Code</a>
+      <a class="btn btn-outline" href="poster/poster.html" target="_blank" rel="noopener">&#128203; Poster</a>
+      <a class="btn btn-outline" href="#bibtex">&#128214; BibTeX</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- Teaser stats -->
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="num">1<sup>st</sup></div>
+      <div class="label">SSL framework in<br>latent VCG space</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">67.3</div>
+      <div class="label">best avg AUC@1%<br>across 6 datasets</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">+10.6</div>
+      <div class="label">AUC pts on CPSC@1%<br>vs best SSL baseline</div>
+    </div>
+    <div class="stat-item">
+      <div class="num">0.47</div>
+      <div class="label">recon MSE, PTB (3→12)<br>vs 1.56 Nef-Net</div>
+    </div>
+  </div>
+
+  <!-- Abstract -->
+  <section id="abstract">
+    <h2 class="section-title">Abstract</h2>
+    <div class="card">
+      <p>
+        Electrocardiography (ECG) is a cornerstone of cardiac assessment, making the learning of informative ECG representations fundamental to tasks ranging from disease diagnosis to clinical report generation. However, existing methods operate almost exclusively in the observable ECG signal space. In practice, the standard twelve-lead ECG represents multiple projections of the same underlying cardiac electrical activity from different spatial orientations. Therefore, representation learning in the ECG space inevitably introduces substantial redundancy, which may lead to spurious correlations and increased risk of overfitting.
+      </p>
+      <p style="margin-top: 1rem;">
+        To address this and motivated by the Frank vectorcardiogram (VCG) model, we propose learning a unified latent representation of cardiac electrical activity directly in the VCG space. We introduce <strong>LVCG</strong>, the first general self-supervised representation learning framework designed to operate in this physically grounded latent space. By learning view-invariant latent VCG representations rather than lead-specific artifacts, LVCG minimizes redundancy and improves generalization. LVCG generally outperforms ECG-space baselines across tasks, demonstrating enhanced robustness and generalization, especially in domain shift settings.
+      </p>
+    </div>
+  </section>
+
+  <!-- Motivation -->
+  <section id="motivation">
+    <h2 class="section-title"><span class="num">1</span>Motivation</h2>
+    <div class="two-col">
+      <div class="card highlight">
+        <p>
+          Existing ECG representation learning operates almost entirely in the raw
+          <span class="keyword">signal space</span>, treating leads as independent channels. Yet the
+          12-lead ECG is just multiple <strong>linear projections</strong> of one underlying 3D cardiac
+          electrical field — the <span class="keyword">vectorcardiogram (VCG)</span>.
+        </p>
+        <div class="callout" style="margin-top: 1rem;">
+          <strong>Idea:</strong> learn <strong>one view-invariant</strong> representation directly in
+          the physically-grounded VCG space, not the redundant lead space.
+        </div>
+      </div>
+      <div class="card">
+        <p><strong>Two failures of signal-space learning:</strong></p>
+        <ul class="content-list">
+          <li><strong>Physical inconsistency.</strong> Treating leads as independent ignores linear lead-field dependencies, yielding patterns inconsistent with real cardiac activity.</li>
+          <li><strong>Feature–geometry entanglement.</strong> Waveform morphology depends on electrode placement and body conductivity, so encoders overfit acquisition setup and generalize poorly.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="figure" style="margin-top: 1.5rem;">
+      <img src="assets/vcg_concept.svg" alt="3D VCG trajectory projected onto ECG leads I, V2, aVF">
+      <p class="caption">
+        Each lead $e_l(t)=\mathbf{u}_l^\top\mathbf{v}(t)$ is one 1D view of the same 3D field
+        $\mathbf{v}(t)$; the fixed lead geometry maps between VCG and ECG space.
+      </p>
+    </div>
+  </section>
+
+  <!-- Method -->
+  <section id="method">
+    <h2 class="section-title"><span class="num">2</span>Method</h2>
+
+    <div class="figure">
+      <img src="assets/framework.svg" alt="LVCG framework pipeline">
+      <p class="caption">
+        LVCG performs self-supervised multi-lead reconstruction: observe $K$ leads, recover the full 12-lead ECG through a latent VCG space with geometry-induced lift and project operations.
+      </p>
+    </div>
+
+    <div class="card" style="margin-top: 1.5rem;">
+      <p style="margin-bottom: 1rem;">
+        The 12-lead ECG is many linear views of <strong>one 3D cardiac electrical field</strong>. LVCG learns ECG representations <strong>in a physically-grounded latent VCG space</strong> via multi-lead reconstruction with a geometry-induced lift/project — yielding view-invariant embeddings that generalize under domain shift.
+      </p>
+
+      <div class="flow-strip">
+        <div class="step"><span class="step-name">Beat</span>R–R + beat patches</div>
+        <span class="arrow">→</span>
+        <div class="step"><span class="step-name">Lift</span>ECG→VCG (geometry)</div>
+        <span class="arrow">→</span>
+        <div class="step"><span class="step-name">Encode</span>VCG token bottleneck</div>
+        <span class="arrow">→</span>
+        <div class="step"><span class="step-name">Temporal</span>beat-to-beat GRU</div>
+        <span class="arrow">→</span>
+        <div class="step step--final"><span class="step-name">Project</span>VCG→ECG leads</div>
+      </div>
+
+      <div class="two-col" style="margin-top: 1rem;">
+        <div class="eqn-block">
+          <span class="eqn-label">Lift (ECG → VCG): Tikhonov least-squares</span>
+          $$\tilde{\mathbf{v}}^{(n)}_{\mathcal{I}}(\tau)=\arg\min_{\mathbf{v}\in\mathbb{R}^3}\,\lVert\mathbf{A}_{\mathcal{I}}\mathbf{v}-\mathbf{E}^{(n)}_{\mathcal{I}}(\tau)\rVert_2^2+\varepsilon\lVert\mathbf{v}\rVert_2^2$$
+        </div>
+        <div class="eqn-block">
+          <span class="eqn-label">Project (VCG → any target leads)</span>
+          $$\hat{\mathbf{E}}^{(n)}_{\mathcal{J}}(\tau)=\mathbf{A}_{\mathcal{J}}\,\hat{\mathbf{v}}^{(n)}_{\mathcal{I}}(\tau)$$
+        </div>
+      </div>
+
+      <div class="eqn-block">
+        <span class="eqn-label">Self-supervised objective: view-consistent reconstruction + temporal regularization</span>
+        $$\mathcal{L}=\mathcal{L}_{\text{ECG}}+\lambda_{\text{vcg}}\,\mathcal{L}_{\text{VCG}}+\lambda_{\text{temp}}\,\mathcal{L}_{\text{temp}}$$
+      </div>
+
+      <div class="callout gold">
+        <strong>Downstream:</strong> freeze the backbone, train a linear head on
+        $\mathbf{e}=[\mathbf{e}_{\text{struct}};\mathbf{e}_{\text{dyn}};\mathbf{e}_{\text{rhythm}}]$ —
+        quality shows under <strong>label scarcity</strong> and <strong>domain shift</strong>.
+      </div>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section id="results">
+    <h2 class="section-title"><span class="num">3</span>Results</h2>
+
+    <p class="table-caption">
+      LVCG is pretrained on <strong>MIMIC-IV-ECG</strong> and evaluated via linear probing on six downstream datasets (PTB-XL variants, CPSC 2018, CSN). Mean test AUC (%) reported at 1%, 10%, and 100% label fractions.
+    </p>
+
+    <div class="card highlight" style="margin-bottom: 1.5rem;">
+      <h3 style="font-family: var(--font-sans); font-size: 1rem; color: var(--accent-deep); margin-bottom: 0.75rem;">Linear Probing — Average AUC Across 6 Datasets</h3>
+      <div class="table-wrap">
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th class="method">Method</th>
+              <th>1%</th>
+              <th>10%</th>
+              <th>100%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="method">ST-MEM</td><td>56.42</td><td>63.39</td><td>69.60</td></tr>
+            <tr><td class="method">HeartLang</td><td>63.80</td><td>73.39</td><td class="best">84.56</td></tr>
+            <tr class="ours"><td class="method">LVCG (ours)</td><td class="best">67.30</td><td class="best">74.54</td><td>80.47</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top: 0.75rem; font-size: 0.92rem;">
+        On shifted external sets, LVCG wins the low-label regime:
+        <span class="keyword">+10.6</span> AUC on CPSC@1% (71.09 vs 60.44) and
+        <span class="keyword">+4.5</span> on CSN@1% (62.47 vs 57.94) over the best SSL baseline.
+      </p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3 style="font-family: var(--font-sans); font-size: 1rem; color: var(--accent-deep); margin-bottom: 0.75rem;">Multi-Lead Reconstruction (3→12)</h3>
+        <div class="table-wrap">
+          <table class="result-table">
+            <thead>
+              <tr>
+                <th class="method">Method</th>
+                <th>CPSC MSE↓</th>
+                <th>PTB MSE↓</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="method">Nef-Net</td><td>0.68</td><td>1.56</td></tr>
+              <tr class="ours"><td class="method">LVCG</td><td class="best">0.49</td><td class="best">0.47</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--text-secondary);">
+          On PTB, LVCG cuts reconstruction MSE <strong>3.3×</strong> vs Nef-Net.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-family: var(--font-sans); font-size: 1rem; color: var(--accent-deep); margin-bottom: 0.75rem;">Non-Cardiac Transfer (AUC@1%)</h3>
+        <div class="table-wrap">
+          <table class="result-table">
+            <thead>
+              <tr>
+                <th class="method">Method</th>
+                <th>Kidney</th>
+                <th>Diabetes</th>
+                <th>Sepsis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="method">HeartLang</td><td>58.92</td><td>60.41</td><td>69.02</td></tr>
+              <tr class="ours"><td class="method">LVCG</td><td class="best">69.04</td><td class="best">63.51</td><td class="best">71.68</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--text-secondary);">
+          Frozen ECG embeddings transfer beyond cardiac endpoints — LVCG tops HeartLang by <strong>+10.1</strong> AUC on kidney disease.
+        </p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 1.5rem;">
+      <h3 style="font-family: var(--font-sans); font-size: 1rem; color: var(--accent-deep); margin-bottom: 0.75rem;">Ablation: VCG Space Geometry (AUC@1%)</h3>
+      <div class="table-wrap">
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th class="method">Variant</th>
+              <th>Super</th>
+              <th>Sub</th>
+              <th>Rhythm</th>
+              <th>CPSC</th>
+              <th>CSN</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="method">ECG Space</td><td>51.26</td><td>50.34</td><td>61.11</td><td>50.88</td><td>52.53</td></tr>
+            <tr><td class="method">Learnable Transform</td><td>65.02</td><td>55.35</td><td>52.44</td><td>59.14</td><td>57.45</td></tr>
+            <tr><td class="method">Shuffle Direction Matrix</td><td>66.54</td><td>58.31</td><td>62.07</td><td>63.12</td><td>57.61</td></tr>
+            <tr class="ours"><td class="method">LVCG (full)</td><td class="best">75.33</td><td class="best">70.61</td><td class="best">72.03</td><td class="best">71.09</td><td class="best">62.47</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--text-secondary);">
+        Removing, learning, or shuffling the VCG transform degrades performance sharply — geometry is load-bearing.
+      </p>
+    </div>
+  </section>
+
+  <!-- BibTeX -->
+  <section id="bibtex">
+    <h2 class="section-title">BibTeX</h2>
+    <div class="bibtex-block">
+      <button class="copy-btn" id="copy-bibtex">Copy</button>
+      <pre id="bibtex">@inproceedings{huang2026lvcg,
+  title     = {Learning Cardiac Latent Representations in Vectorcardiogram Space},
+  author    = {Huang, Bosong and Zhao, Panzhen and Li, Zengxiang and Lee, Patricia and Jin, Wei and Liew, Alan Wee-Chung and Jin, Ming and Pan, Shirui},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year      = {2026},
+  note      = {Poster}
+}</pre>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>
+    <strong>LVCG</strong> · ICML 2026 Poster<br>
+    Supported by ARC (FT210100097, DP240101547) &amp; NMRC Singapore (MOH-000655-00, MOH-001014-00)
+  </p>
+  <p style="margin-top: 0.75rem;">
+    <a href="https://github.com/BosonHwang/LVCG" target="_blank" rel="noopener">github.com/BosonHwang/LVCG</a>
+    &nbsp;·&nbsp;
+  </p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

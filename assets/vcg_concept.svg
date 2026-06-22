@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 260" role="img" aria-label="VCG as 3D cardiac field projected to ECG leads">
+  <defs>
+    <marker id="arr" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L5,3 L0,6 Z" fill="#155E78"/>
+    </marker>
+  </defs>
+  <rect width="520" height="260" rx="10" fill="#FAFAFB" stroke="#D5E2E7"/>
+
+  <!-- 3D VCG loop -->
+  <text x="130" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0F4254">3D VCG Field v(t)</text>
+  <ellipse cx="130" cy="140" rx="70" ry="35" fill="none" stroke="#ccc" stroke-width="1" stroke-dasharray="4 3"/>
+  <ellipse cx="130" cy="140" rx="70" ry="35" fill="none" stroke="#155E78" stroke-width="2.5" transform="rotate(-20 130 140)"/>
+  <circle cx="130" cy="140" r="4" fill="#C9A24A"/>
+  <!-- axes -->
+  <line x1="130" y1="140" x2="175" y2="115" stroke="#888" stroke-width="1"/>
+  <line x1="130" y1="140" x2="95" y2="175" stroke="#888" stroke-width="1"/>
+  <line x1="130" y1="140" x2="130" y2="195" stroke="#888" stroke-width="1"/>
+  <text x="180" y="112" font-family="Inter,sans-serif" font-size="10" fill="#888">x</text>
+  <text x="88" y="180" font-family="Inter,sans-serif" font-size="10" fill="#888">y</text>
+  <text x="134" y="205" font-family="Inter,sans-serif" font-size="10" fill="#888">z</text>
+
+  <!-- projection arrows -->
+  <line x1="210" y1="140" x2="270" y2="140" stroke="#155E78" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="240" y="128" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#155E78">u_l^T v(t)</text>
+
+  <!-- ECG leads -->
+  <text x="390" y="28" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0F4254">12-Lead ECG Projections</text>
+
+  <text x="310" y="70" font-family="Inter,sans-serif" font-size="11" fill="#555">Lead I</text>
+  <path d="M310 80 h140" stroke="#eee" stroke-width="1"/>
+  <path d="M310 80 Q340 65 370 80 T430 80" stroke="#155E78" fill="none" stroke-width="1.8"/>
+
+  <text x="310" y="115" font-family="Inter,sans-serif" font-size="11" fill="#555">Lead V2</text>
+  <path d="M310 125 h140" stroke="#eee" stroke-width="1"/>
+  <path d="M310 125 Q340 140 370 125 T430 125" stroke="#1a7a96" fill="none" stroke-width="1.8"/>
+
+  <text x="310" y="160" font-family="Inter,sans-serif" font-size="11" fill="#555">Lead aVF</text>
+  <path d="M310 170 h140" stroke="#eee" stroke-width="1"/>
+  <path d="M310 170 Q340 155 370 170 T430 170" stroke="#C9A24A" fill="none" stroke-width="1.8"/>
+
+  <text x="310" y="205" font-family="Inter,sans-serif" font-size="11" fill="#888">& 9 more leads</text>
+
+  <text x="260" y="245" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#555">E(t) = A · v(t) &nbsp;&nbsp; one field, many linear views</text>
+</svg>
