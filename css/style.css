@@ -547,3 +547,24 @@ ul.content-list li { margin-bottom: 0.5rem; }
   .figure-row,
   .figure-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Hero video ── */
+.hero-video-wrap {
+  margin-bottom: var(--section-gap);
+}
+
+.hero-video {
+  display: block;
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 8px 28px rgba(21, 94, 120, 0.12);
+  background: #0a1520;
+}
+
+.video-caption {
+  text-align: center;
+  margin-top: 0.75rem;
+}
